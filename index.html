@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GramShiksha — Rural Gamified Learning</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- ===== PARTICLES BACKGROUND ===== -->
+  <div class="particles" id="particles"></div>
+
+  <!-- ===== LOGIN PAGE ===== -->
+  <div id="loginPage" class="page active">
+
+    <div class="login-container">
+      <!-- Branding -->
+      <div class="brand">
+        <div class="brand-icon">🌾</div>
+        <h1 class="brand-title">GramShiksha</h1>
+        <p class="brand-tagline">Gamified Learning for Every Village</p>
+      </div>
+
+      <!-- Portal Selector -->
+      <div class="portal-selector">
+        <button class="portal-btn active" id="studentPortalBtn" onclick="switchPortal('student')">
+          <span class="portal-icon">🎒</span>
+          <span>Student</span>
+        </button>
+        <button class="portal-btn" id="teacherPortalBtn" onclick="switchPortal('teacher')">
+          <span class="portal-icon">📚</span>
+          <span>Teacher</span>
+        </button>
+      </div>
+
+      <!-- Login Form -->
+      <div class="login-card" id="loginCard">
+        <div class="card-header" id="cardHeader">
+          <div class="avatar-ring" id="avatarRing">🎒</div>
+          <h2 id="cardTitle">Student Login</h2>
+          <p id="cardSubtitle">Welcome back, learner!</p>
+        </div>
+
+        <form class="login-form" onsubmit="handleLogin(event)">
+          <div class="input-group">
+            <label for="username">Username / Roll No.</label>
+            <div class="input-wrapper">
+              <span class="input-icon">👤</span>
+              <input type="text" id="username" placeholder="Enter your username" required/>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="password">Password</label>
+            <div class="input-wrapper">
+              <span class="input-icon">🔒</span>
+              <input type="password" id="password" placeholder="Enter password" required/>
+              <span class="toggle-pwd" onclick="togglePassword()">👁</span>
+            </div>
+          </div>
+
+          <div class="form-options">
+            <label class="remember-me">
+              <input type="checkbox"/> Remember me
+            </label>
+            <a href="#" class="forgot-link">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="login-btn" id="loginBtn">
+            <span class="btn-text">Enter the Learning World →</span>
+            <span class="btn-loader" style="display:none">⏳ Loading...</span>
+          </button>
+        </form>
+
+        <div class="demo-hint">
+          <span>🔑 Demo: any username + password</span>
+        </div>
+      </div>
+
+      <!-- Floating Badges -->
+      <div class="floating-badges">
+        <div class="fbadge b1">🏅</div>
+        <div class="fbadge b2">⭐</div>
+        <div class="fbadge b3">🎯</div>
+        <div class="fbadge b4">🚀</div>
+        <div class="fbadge b5">🌟</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DASHBOARD PAGE ===== -->
+  <div id="dashboardPage" class="page">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <span>🌾</span>
+        <span>GramShiksha</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" onclick="showSection('overview', this)">
+          <span>🏠</span><span>Overview</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('progress', this)">
+          <span>📈</span><span>My Progress</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('badges', this)">
+          <span>🏆</span><span>Badges</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('courses', this)">
+          <span>📚</span><span>Courses</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('leaderboard', this)">
+          <span>🥇</span><span>Leaderboard</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('settings', this)">
+          <span>⚙️</span><span>Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-mini">
+          <div class="user-mini-avatar" id="sidebarAvatar">🎒</div>
+          <div>
+            <div class="user-mini-name" id="sidebarName">Student</div>
+            <div class="user-mini-role" id="sidebarRole">Student</div>
+          </div>
+        </div>
+        <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+      <!-- Top Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+          <h2 class="page-title" id="pageTitle">Dashboard Overview</h2>
+        </div>
+        <div class="topbar-right">
+          <div class="xp-bar-wrap">
+            <span class="xp-label">XP</span>
+            <div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
+            <span class="xp-count" id="xpCount">0</span>
+          </div>
+          <div class="streak-badge">🔥 <span id="streakCount">5</span> day streak</div>
+          <div class="notif-bell">🔔</div>
+        </div>
+      </header>
+
+      <!-- ---- SECTION: OVERVIEW ---- -->
+      <section class="dash-section active" id="section-overview">
+
+        <div class="welcome-banner" id="welcomeBanner">
+          <div class="welcome-text">
+            <h3 id="welcomeMsg">Welcome back! 🎉</h3>
+            <p id="welcomeSub">Keep up your amazing learning streak!</p>
+          </div>
+          <div class="welcome-art">🌟</div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-grid">
+          <div class="stat-card" style="--accent:#FFD700">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-val" id="totalXP">1,250</div>
+            <div class="stat-label">Total XP</div>
+          </div>
+          <div class="stat-card" style="--accent:#FF6B6B">
+            <div class="stat-icon">🔥</div>
+            <div class="stat-val">5</div>
+            <div class="stat-label">Day Streak</div>
+          </div>
+          <div class="stat-card" style="--accent:#4ECDC4">
+            <div class="stat-icon">✅</div>
+            <div class="stat-val">12</div>
+            <div class="stat-label">Lessons Done</div>
+          </div>
+          <div class="stat-card" style="--accent:#A855F7">
+            <div class="stat-icon">🏅</div>
+            <div class="stat-val">6</div>
+            <div class="stat-label">Badges Earned</div>
+          </div>
+        </div>
+
+        <!-- Recent Badges -->
+        <div class="section-header">
+          <h3>🏆 Recent Badges</h3>
+          <a href="#" onclick="showSection('badges', null)">View All →</a>
+        </div>
+        <div class="badges-scroll">
+          <div class="badge-chip earned"><span>🌟</span><div class="badge-info"><b>Star Learner</b><small>5 days streak</small></div></div>
+          <div class="badge-chip earned"><span>📖</span><div class="badge-info"><b>Bookworm</b><small>Read 10 lessons</small></div></div>
+          <div class="badge-chip earned"><span>🧮</span><div class="badge-info"><b>Math Wizard</b><small>100% in quiz</small></div></div>
+          <div class="badge-chip locked"><span>🔒</span><div class="badge-info"><b>Science Star</b><small>Complete 5 science</small></div></div>
+          <div class="badge-chip locked"><span>🔒</span><div class="badge-info"><b>Geography Pro</b><small>Map 10 states</small></div></div>
+        </div>
+
+        <!-- Subject Progress -->
+        <div class="section-header"><h3>📊 Subject Progress</h3></div>
+        <div class="progress-cards">
+          <div class="progress-card">
+            <div class="pcardtop"><span>🔢 Mathematics</span><span>72%</span></div>
+            <div class="pbar"><div class="pbar-fill" style="width:72%; background:#FFD700"></div></div>
+          </div>
+          <div class="progress-card">
+            <div class="pcardtop"><span>🔬 Science</span><span>55%</span></div>
+            <div class="pbar"><div class="pbar-fill" style="width:55%; background:#4ECDC4"></div></div>
+          </div>
+          <div class="progress-card">
+            <div class="pcardtop"><span>📝 Hindi</span><span>88%</span></div>
+            <div class="pbar"><div class="pbar-fill" style="width:88%; background:#FF6B6B"></div></div>
+          </div>
+          <div class="progress-card">
+            <div class="pcardtop"><span>🌍 Social Studies</span><span>40%</span></div>
+            <div class="pbar"><div class="pbar-fill" style="width:40%; background:#A855F7"></div></div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ---- SECTION: PROGRESS ---- -->
+      <section class="dash-section" id="section-progress">
+        <h3 class="section-title">📈 Detailed Progress</h3>
+        <div class="activity-list">
+          <div class="activity-item"><span>🔢</span><div><b>Math - Fractions Quiz</b><small>Completed • +80 XP</small></div><span class="score green">95%</span></div>
+          <div class="activity-item"><span>🔬</span><div><b>Science - Photosynthesis</b><small>Completed • +60 XP</small></div><span class="score green">88%</span></div>
+          <div class="activity-item"><span>📝</span><div><b>Hindi - Grammar Test</b><small>Completed • +70 XP</small></div><span class="score yellow">75%</span></div>
+          <div class="activity-item"><span>🌍</span><div><b>SST - Rivers of India</b><small>In Progress</small></div><span class="score blue">50%</span></div>
+          <div class="activity-item"><span>🔢</span><div><b>Math - Decimals</b><small>Not Started</small></div><span class="score gray">—</span></div>
+        </div>
+      </section>
+
+      <!-- ---- SECTION: BADGES ---- -->
+      <section class="dash-section" id="section-badges">
+        <h3 class="section-title">🏆 All Badges</h3>
+        <div class="all-badges-grid">
+          <div class="big-badge earned"><div class="bb-icon">🌟</div><b>Star Learner</b><small>5 day streak</small></div>
+          <div class="big-badge earned"><div class="bb-icon">📖</div><b>Bookworm</b><small>10 lessons</small></div>
+          <div class="big-badge earned"><div class="bb-icon">🧮</div><b>Math Wizard</b><small>100% score</small></div>
+          <div class="big-badge earned"><div class="bb-icon">🏃</div><b>Quick Learner</b><small>3 lessons/day</small></div>
+          <div class="big-badge earned"><div class="bb-icon">🤝</div><b>Team Player</b><small>Group activity</small></div>
+          <div class="big-badge earned"><div class="bb-icon">🎯</div><b>Sharpshooter</b><small>5 quizzes perfect</small></div>
+          <div class="big-badge locked"><div class="bb-icon">🔒</div><b>Science Star</b><small>5 science lessons</small></div>
+          <div class="big-badge locked"><div class="bb-icon">🔒</div><b>Geography Pro</b><small>Map all states</small></div>
+          <div class="big-badge locked"><div class="bb-icon">🔒</div><b>Polyglot</b><small>3 languages</small></div>
+        </div>
+      </section>
+
+      <!-- ---- SECTION: COURSES ---- -->
+      <section class="dash-section" id="section-courses">
+        <h3 class="section-title">📚 My Courses</h3>
+        <div class="courses-grid">
+          <div class="course-card" style="--cclr:#FFD700">
+            <div class="cc-icon">🔢</div>
+            <h4>Mathematics</h4>
+            <p>Class 6 • 18 Lessons</p>
+            <div class="cc-progress"><div style="width:72%"></div></div>
+            <button class="cc-btn">Continue →</button>
+          </div>
+          <div class="course-card" style="--cclr:#4ECDC4">
+            <div class="cc-icon">🔬</div>
+            <h4>Science</h4>
+            <p>Class 6 • 15 Lessons</p>
+            <div class="cc-progress"><div style="width:55%"></div></div>
+            <button class="cc-btn">Continue →</button>
+          </div>
+          <div class="course-card" style="--cclr:#FF6B6B">
+            <div class="cc-icon">📝</div>
+            <h4>Hindi</h4>
+            <p>Class 6 • 12 Lessons</p>
+            <div class="cc-progress"><div style="width:88%"></div></div>
+            <button class="cc-btn">Continue →</button>
+          </div>
+          <div class="course-card" style="--cclr:#A855F7">
+            <div class="cc-icon">🌍</div>
+            <h4>Social Studies</h4>
+            <p>Class 6 • 20 Lessons</p>
+            <div class="cc-progress"><div style="width:40%"></div></div>
+            <button class="cc-btn">Continue →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---- SECTION: LEADERBOARD ---- -->
+      <section class="dash-section" id="section-leaderboard">
+        <h3 class="section-title">🥇 Class Leaderboard</h3>
+        <div class="leaderboard">
+          <div class="lb-item rank1"><span class="lb-rank">🥇</span><span class="lb-name">Priya Sharma</span><span class="lb-xp">2100 XP</span></div>
+          <div class="lb-item rank2"><span class="lb-rank">🥈</span><span class="lb-name">Rahul Verma</span><span class="lb-xp">1980 XP</span></div>
+          <div class="lb-item rank3"><span class="lb-rank">🥉</span><span class="lb-name">Anita Patel</span><span class="lb-xp">1850 XP</span></div>
+          <div class="lb-item you"><span class="lb-rank">4️⃣</span><span class="lb-name">You ⬅</span><span class="lb-xp">1250 XP</span></div>
+          <div class="lb-item"><span class="lb-rank">5️⃣</span><span class="lb-name">Ravi Kumar</span><span class="lb-xp">1100 XP</span></div>
+          <div class="lb-item"><span class="lb-rank">6️⃣</span><span class="lb-name">Sita Devi</span><span class="lb-xp">980 XP</span></div>
+        </div>
+      </section>
+
+      <!-- ---- SECTION: SETTINGS ---- -->
+      <section class="dash-section" id="section-settings">
+        <h3 class="section-title">⚙️ Settings</h3>
+        <div class="settings-form">
+          <div class="setting-row">
+            <label>Display Name</label>
+            <input type="text" id="dispName" placeholder="Your name"/>
+          </div>
+          <div class="setting-row">
+            <label>Language</label>
+            <select>
+              <option>Hindi</option>
+              <option>English</option>
+              <option>Punjabi</option>
+              <option>Tamil</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <label>Daily Goal</label>
+            <select>
+              <option>2 lessons/day</option>
+              <option>3 lessons/day</option>
+              <option>5 lessons/day</option>
+            </select>
+          </div>
+          <div class="setting-row toggle-row">
+            <label>Dark Mode</label>
+            <div class="toggle" id="darkToggle" onclick="toggleDark()"><div class="toggle-knob"></div></div>
+          </div>
+          <button class="save-btn" onclick="saveSettings()">💾 Save Changes</button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
