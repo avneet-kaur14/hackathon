@@ -82,7 +82,7 @@ body {
   width: 100%;
   max-width: 480px;
   padding: 24px;
-  position: relative;
+  position:relative;
   z-index: 1;
 }
 
